@@ -1,0 +1,6 @@
+Metric,Best Model,Score
+Accuracy,XGBoost,0.61
+Precision,XGBoost,0.60
+Recall,XGBoost,0.61
+F1-Score,XGBoost,0.60
+RMSE,Gradient Boosting,0.94

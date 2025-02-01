@@ -1,0 +1,9 @@
+Model,Accuracy,Precision,Recall,F1-Score,RMSE
+KNN,0.57,0.5,0.57,0.52,1.06
+SVM,0.54,0.46,0.54,0.48,1.06
+Logistic Regression,0.55,0.48,0.55,0.51,0.99
+Gradient Boosting,0.6,0.58,0.6,0.58,0.94
+Decision Tree,0.55,0.56,0.55,0.55,1.03
+Random Forest,0.59,0.54,0.59,0.56,0.99
+Naive Bayes,0.33,0.47,0.33,0.32,2.11
+XGBoost,0.61,0.6,0.61,0.6,0.96

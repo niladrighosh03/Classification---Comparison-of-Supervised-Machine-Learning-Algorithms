@@ -1,0 +1,6 @@
+Metric,Best Model,Score
+Accuracy,Decision Tree,1.00
+Precision,Decision Tree,1.00
+Recall,Decision Tree,1.00
+F1-Score,Decision Tree,1.00
+RMSE,Decision Tree,0.00
