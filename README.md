@@ -1,4 +1,3 @@
-
 # ❤️ Heart Disease Prediction Using Machine Learning
 
 This project applies supervised machine learning algorithms to predict the risk of heart disease using the UCI Heart Disease dataset. The dataset consists of patient attributes and clinical measurements, which are used to classify individuals into heart disease risk categories. 
@@ -17,7 +16,7 @@ The implementation includes:
 2. [📈 Dataset](#dataset)  
 3. [🛠️ Preprocessing](#preprocessing)  
 4. [🤖 Algorithms](#algorithms)  
-5. [🚀 Usage](#usage)  
+5. [🌐 User Interface (UI)](#user-interface-ui)  
 6. [🔮 Future Work](#future-work)  
 7. [🙌 Acknowledgments](#acknowledgments)  
 
@@ -64,31 +63,28 @@ The following machine learning models were evaluated:
 
 Evaluation metrics include accuracy, precision, recall, F1-score, and Root Mean Squared Error (RMSE).  
 
-
 ---
 
+## 🌐 User Interface (UI)
 
-## 🚀 Usage
+A **Streamlit-based web application** has been developed to provide an interactive UI for heart disease prediction.
 
-### Requirements
-- **Python 3.8+**  
-- Libraries:  
-  `pandas`, `numpy`, `scikit-learn`, `matplotlib`, `seaborn`, `xgboost`, `streamlit`
-
-### Steps to Run the Project
+### Steps to Run the Application
 1. 🔗 Clone the repository:  
    ```bash
-   git clone https://github.com/your-repo/heart-disease-prediction.git
-   cd heart-disease-prediction
+   git clone github.com/niladrighosh03/Classification---Comparison-of-Supervised-Machine-Learning-Algorithms
+   cd Classification---Comparison-of-Supervised-Machine-Learning-Algorithms
    ```
 2. 📦 Install dependencies:  
    ```bash
    pip install -r requirements.txt
    ```
-3. 📝 Run the Jupyter Notebook for data preprocessing and training:  
+3. 🚀 Run the Streamlit app:  
    ```bash
-   jupyter notebook Project_Code.ipynb
+   cd Measurements
+   streamlit run app.py
    ```
+4. 🌍 Open the displayed **local URL** in your browser to access the UI.
 
 ---
 
@@ -105,6 +101,6 @@ Evaluation metrics include accuracy, precision, recall, F1-score, and Root Mean 
 
 Special thanks to:  
 - 🏫 **Ramakrishna Mission Vivekananda Educational and Research Institute (RKMVERI)** for resources.  
-- 👨‍🏫 **Dr. Tamal**, for guidance and support throughout the project.  
+- 👨‍🏫 **Br. Tamal Mj**, for guidance and support throughout the project.  
 
 ---
