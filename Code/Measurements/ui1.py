@@ -25,16 +25,17 @@ st.markdown(
 # Load trained models and their accuracies
 def load_models():
     models = {
-        "KNN": (joblib.load("knn_model.pkl"), 0.85),
-        "SVM": (joblib.load("svm_model.pkl"), 0.88),
-        "Logistic Regression": (joblib.load("logreg_model.pkl"), 0.86),
-        "Gradient Boosting": (joblib.load("gb_model.pkl"), 0.90),
-        "Decision Tree": (joblib.load("dt_model.pkl"), 0.82),
-        "Random Forest": (joblib.load("rf_model.pkl"), 0.89),
-        "Naïve Bayes": (joblib.load("nb_model.pkl"), 0.81),
-        "XGBoost": (joblib.load("xgb_model.pkl"), 0.91)
+        "KNN": joblib.load("knn_model.pkl"),
+        "SVM": joblib.load("svm_model.pkl"),
+        "Logistic Regression": joblib.load("logreg_model.pkl"),
+        "Gradient Boosting": joblib.load("gb_model.pkl"),
+        "Decision Tree": joblib.load("dt_model.pkl"),
+        "Random Forest": joblib.load("rf_model.pkl"),
+        "Naïve Bayes": joblib.load("nb_model.pkl"),
+        "XGBoost": joblib.load("xgb_model.pkl")
     }
     return models
+
 
 # Function to preprocess user input
 def preprocess_input(user_input):
@@ -108,29 +109,36 @@ def preprocess_input(user_input):
 
 # Function to predict using all models
 def predict(models, input_data):
-    predictions = {name: (model.predict(input_data)[0], acc) for name, (model, acc) in models.items()}
+    predictions = {name: model.predict(input_data)[0] for name, model in models.items()}
     return predictions
+
 
 # Streamlit UI
 st.title("🔬 Heart Disease Prediction System")
 st.markdown("### 🏥 A Machine Learning-Based Health Assistant")
 
-# Sidebar for User Input
-st.sidebar.header("User Input Parameters")
-age = st.sidebar.number_input("Age", 18, 100, 45)
-sex = st.sidebar.selectbox("Sex", ["Male", "Female"])
-cp = st.sidebar.selectbox("Chest Pain Type", ["typical angina", "atypical angina", "non-anginal", "asymptomatic"])
-trestbps = st.sidebar.number_input("Resting Blood Pressure (mm Hg)", 80, 200, 120)
-chol = st.sidebar.number_input("Serum Cholesterol (mg/dl)", 100, 400, 200)
-fbs = st.sidebar.selectbox("Fasting Blood Sugar > 120 mg/dl", ["True", "False"])
-restecg = st.sidebar.selectbox("Resting ECG Results", ["normal", "st-t abnormality", "lv hypertrophy"])
-thalch = st.sidebar.number_input("Max Heart Rate Achieved", 60, 220, 150)
-exang = st.sidebar.selectbox("Exercise-Induced Angina", ["True", "False"])
-oldpeak = st.sidebar.number_input("ST Depression Induced", 0.0, 6.2, 1.0)
-slope = st.sidebar.selectbox("Slope of Peak Exercise ST Segment", ["upsloping", "flat", "downsloping"])
-ca = st.sidebar.number_input("Number of Major Vessels Colored by Fluoroscopy", 0, 4, 0)
-thal = st.sidebar.selectbox("Thalassemia", ["normal", "fixed defect", "reversable defect"])
+# Create two-column layout
+col1, col2 = st.columns(2)
 
+with col1:
+    age = st.number_input("Age", 18, 100, 45)
+    sex = st.selectbox("Sex", ["Male", "Female"])
+    cp = st.selectbox("Chest Pain Type", ["typical angina", "atypical angina", "non-anginal", "asymptomatic"])
+    trestbps = st.number_input("Resting Blood Pressure (mm Hg)", 80, 200, 120)
+    chol = st.number_input("Serum Cholesterol (mg/dl)", 100, 400, 200)
+    fbs = st.selectbox("Fasting Blood Sugar > 120 mg/dl", ["True", "False"])
+    thal = st.selectbox("Thalassemia", ["normal", "fixed defect", "reversable defect"])
+    
+with col2:
+    restecg = st.selectbox("Resting ECG Results", ["normal", "st-t abnormality", "lv hypertrophy"])
+    thalch = st.number_input("Max Heart Rate Achieved", 60, 220, 150)
+    exang = st.selectbox("Exercise-Induced Angina", ["True", "False"])
+    oldpeak = st.number_input("ST Depression Induced", 0.0, 6.2, 1.0)
+    slope = st.selectbox("Slope of Peak Exercise ST Segment", ["upsloping", "flat", "downsloping"])
+    ca = st.number_input("Number of Major Vessels Colored by Fluoroscopy", 0, 4, 0)
+    
+
+st.markdown("---")  # Stylish separator
 user_input = {
     "age": age, "sex": sex, "cp": cp, "trestbps": trestbps, "chol": chol,
     "fbs": fbs, "restecg": restecg, "thalch": thalch, "exang": exang, 
@@ -149,44 +157,20 @@ class_labels = {
 }
 
 if st.button("🔍 Predict"):
-    with st.spinner("Processing... Please wait..."):
+    with st.spinner("Processing..."):
         time.sleep(2)  # Simulated loading effect
         models = load_models()
         input_data = preprocess_input(user_input)
         predictions = predict(models, input_data)
 
-    # Find the model with highest & lowest accuracy
-    best_model = max(predictions, key=lambda x: predictions[x][1])
-    worst_model = min(predictions, key=lambda x: predictions[x][1])
-
     # Display results
     st.markdown("## 🔎 Prediction Results")
 
-    for model, (prediction, accuracy) in predictions.items():
+    for model, prediction in predictions.items():
         class_name = class_labels.get(prediction, f"Unknown ({prediction})")
 
-        # Highlight highest & lowest accuracy models with colored boxes
-        if model == best_model:
-            st.markdown(
-                f'<div style="background-color:#218838; color:white; padding:10px; border-radius:5px; border-left: 5px solid #1E7E34;">'
-                f'🎉 <b>Best Model: {model}</b><br>'
-                f'🏥 Prediction: <b>{class_name}</b><br>'
-                f'🎯 Accuracy: <b>{accuracy * 100:.2f}%</b>'
-                f'</div>',
-                unsafe_allow_html=True
-            )
-        elif model == worst_model:
-            st.markdown(
-                f'<div style="background-color:#C82333; color:white; padding:10px; border-radius:5px; border-left: 5px solid #A71D2A;">'
-                f'⚠️ <b>Least Accurate Model: {model}</b><br>'
-                f'🏥 Prediction: <b>{class_name}</b><br>'
-                f'🎯 Accuracy: <b>{accuracy * 100:.2f}%</b>'
-                f'</div>',
-                unsafe_allow_html=True
-            )
-        else:
-            st.markdown(f"### **{model}**")
-            st.write(f"- 🏥 Prediction: **{class_name}**")
-            st.write(f"- 🎯 Accuracy: **{accuracy * 100:.2f}%**")
-        
+        st.markdown(f"### **{model}**")
+        st.write(f"- 🏥 Prediction: **{class_name}**")
+
         st.write("---")  # Separator for readability
+

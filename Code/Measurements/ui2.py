@@ -92,56 +92,47 @@ def preprocess_input(user_input):
     # Return final ordered DataFrame
     return processed_df[ordered_columns]
 
-# Function to predict and return confidence scores
+# Function to predict using all models
 def predict(models, input_data):
-    results = {}
-    
-    for name, model in models.items():
-        prediction = model.predict(input_data)[0]
-        
-        # Try to get probability score if supported
-        if hasattr(model, "predict_proba"):
-            proba = model.predict_proba(input_data)[0][prediction]
-            confidence = round(proba * 100, 2)  # Convert to percentage
-        else:
-            confidence = "N/A"
-        
-        results[name] = {"prediction": prediction, "confidence": confidence}
-
-    return results
-
-# Load model accuracy if saved
-def load_model_accuracies():
-    return {
-        "KNN": 0.82,
-        "SVM": 0.87,
-        "Logistic Regression": 0.85,
-        "Gradient Boosting": 0.89,
-        "Decision Tree": 0.78,
-        "Random Forest": 0.88,
-        "Naïve Bayes": 0.83,
-        "XGBoost": 0.91
-    }
+    predictions = {name: model.predict(input_data)[0] for name, model in models.items()}
+    return predictions
 
 # Streamlit UI
 st.title("Heart Disease Prediction")
 st.write("Enter the values for the required features:")
 
 # User Input Fields (Replace with actual UI fields if needed)
+id_value = 1
+age = 43
+origin = "Cleveland"
+sex = "Male"
+cp = "non-anginal"
+trestbps = 140
+chol = 289
+fbs = "TRUE"
+restecg = "normal"
+thalch = 172
+exang = "TRUE"
+oldpeak = 2.5
+slope = "upsloping"
+ca = 0
+thal = "normal"
+
+# Convert categorical inputs to numerical values
 user_input = {
-    "age": 43,
-    "sex": "Male",
-    "cp": "non-anginal",
-    "trestbps": 140,
-    "chol": 289,
-    "fbs": "TRUE",
-    "restecg": "normal",
-    "thalch": 172,
-    "exang": "TRUE",
-    "oldpeak": 2.5,
-    "slope": "upsloping",
-    "ca": 0,
-    "thal": "normal"
+    "age": age,
+    "sex": sex,
+    "cp": cp,
+    "trestbps": trestbps,
+    "chol": chol,
+    "fbs": fbs,
+    "restecg": restecg,
+    "thalch": thalch,
+    "exang": exang,
+    "oldpeak": oldpeak,
+    "slope": slope,
+    "ca": ca,
+    "thal": thal
 }
 
 # Predict button
@@ -149,17 +140,8 @@ if st.button("Predict"):
     models = load_models()
     input_data = preprocess_input(user_input)
     predictions = predict(models, input_data)
-    model_accuracies = load_model_accuracies()
 
-    # Display predictions with accuracy
+    # Display predictions
     st.write("### Predictions")
-    for model, result in predictions.items():
-        prediction = result["prediction"]
-        confidence = result["confidence"]
-        accuracy = model_accuracies.get(model, "N/A")  # Get stored accuracy
-
-        st.write(f"**{model}**")
-        st.write(f"➡️ **Prediction:** {'Heart Disease' if prediction == 1 else 'No Heart Disease'}")
-        st.write(f"🟢 **Confidence:** {confidence}%")
-        st.write(f"📊 **Model Accuracy:** {accuracy * 100}%")
-        st.write("---")
+    for model, prediction in predictions.items():
+        st.write(f"**{model}:** {prediction}")
